@@ -1,0 +1,225 @@
+<div class="page-container">
+  <!-- Navigation Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="brand" aria-label="Basi School Transportation Home">
+        <img
+          ngSrc="basi_icon.png"
+          width="320"
+          height="179"
+          priority
+          alt="Basi School Transportation Logo"
+          class="brand-logo"
+        />
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#information" class="nav-link">Routes & Safety</a>
+        <a href="#office" class="nav-link">Office & Contact</a>
+      </nav>
+
+      <!-- Auth Actions -->
+      <div class="nav-auth">
+        <button type="button" class="btn btn-outline" aria-label="Log in to account">
+          Log In
+        </button>
+        <button type="button" class="btn btn-primary" aria-label="Register for transportation">
+          Register
+        </button>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button
+        type="button"
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    @if (isMenuOpen()) {
+      <nav class="mobile-nav" aria-label="Mobile Navigation">
+        <a href="#services" class="mobile-link" (click)="closeMenu()">Services</a>
+        <a href="#information" class="mobile-link" (click)="closeMenu()">Routes & Safety</a>
+        <a href="#office" class="mobile-link" (click)="closeMenu()">Office & Contact</a>
+        <div class="mobile-auth">
+          <button type="button" class="btn btn-outline full-width" (click)="closeMenu()">Log In</button>
+          <button type="button" class="btn btn-primary full-width" (click)="closeMenu()">Register</button>
+        </div>
+      </nav>
+    }
+  </header>
+
+  <main>
+    <!-- Hero / Introduction Section -->
+    <section class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-container">
+        <span class="tag">School Transport Services</span>
+        <h1 id="hero-title" class="hero-title">
+          Safe, Punctual & Reliable School Transportation
+        </h1>
+        <p class="hero-description">
+          Welcome to Basi School Transportation. We ensure students arrive safely and comfortably each day with certified drivers, supervised vehicles, and structured neighborhood routes.
+        </p>
+        <div class="hero-actions">
+          <a href="#services" class="btn btn-primary btn-lg">View Services</a>
+          <a href="#register-cta" class="btn btn-secondary btn-lg">Register Now</a>
+          <button type="button" class="btn btn-outline btn-lg">Log In</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section services-section" aria-labelledby="services-title">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">Our Services</span>
+          <h2 id="services-title" class="section-title">Transportation Services Offered</h2>
+          <p class="section-subtitle">
+            Providing tailored and secure transit solutions for all students throughout the school year.
+          </p>
+        </div>
+
+        <div class="cards-grid">
+          @for (service of serviceList(); track service.title) {
+            <article class="card service-card">
+              <div class="service-icon-wrapper">
+                <img
+                  [ngSrc]="service.iconSrc"
+                  [width]="service.width"
+                  [height]="service.height"
+                  [alt]="service.iconAlt"
+                  class="service-icon-img"
+                />
+              </div>
+              <h3 class="card-title">{{ service.title }}</h3>
+              <p class="card-text">{{ service.description }}</p>
+            </article>
+          }
+        </div>
+
+        <div class="section-action">
+          <a href="#register-cta" class="btn btn-primary">Register for Transport Services</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- General Information Section -->
+    <section id="information" class="section info-section" aria-labelledby="info-title">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">Guidelines</span>
+          <h2 id="info-title" class="section-title">Routes, Arrangements & Safety Procedures</h2>
+          <p class="section-subtitle">
+            Clear guidelines to maintain safe travel, predictable schedules, and orderly arrangements.
+          </p>
+        </div>
+
+        <div class="info-grid">
+          @for (card of infoCards(); track card.title) {
+            <article class="card info-card">
+              <span class="category-pill">{{ card.category }}</span>
+              <h3 class="card-title">{{ card.title }}</h3>
+              <ul class="points-list">
+                @for (point of card.points; track point) {
+                  <li class="point-item">
+                    <span class="point-bullet" aria-hidden="true">✓</span>
+                    <span>{{ point }}</span>
+                  </li>
+                }
+              </ul>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Registration Call To Action -->
+    <section id="register-cta" class="cta-section" aria-labelledby="cta-title">
+      <div class="cta-container">
+        <h2 id="cta-title" class="cta-title">Register for School Transportation</h2>
+        <p class="cta-description">
+          Enroll your student for the upcoming term or log in to manage your transport route and student schedule.
+        </p>
+        <div class="cta-actions">
+          <button type="button" class="btn btn-dark btn-lg">Register Student</button>
+          <button type="button" class="btn btn-outline-white btn-lg">Parent Log In</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Office & Contact Details -->
+    <section id="office" class="section office-section" aria-labelledby="office-title">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">Support & Location</span>
+          <h2 id="office-title" class="section-title">Transportation Office Details</h2>
+          <p class="section-subtitle">
+            Have questions regarding bus routes or transport registrations? Contact our office team.
+          </p>
+        </div>
+
+        <div class="office-grid">
+          <div class="card office-card">
+            <h3 class="office-label">Office Location</h3>
+            <p class="office-value">{{ officeDetails().location }}</p>
+          </div>
+
+          <div class="card office-card">
+            <h3 class="office-label">Working Hours</h3>
+            <p class="office-value">{{ officeDetails().workingHours }}</p>
+          </div>
+
+          <div class="card office-card">
+            <h3 class="office-label">Direct Office Phone</h3>
+            <p class="office-value">
+              <a [href]="'tel:' + officeDetails().phone" class="contact-link">
+                {{ officeDetails().phone }}
+              </a>
+            </p>
+          </div>
+
+          <div class="card office-card">
+            <h3 class="office-label">Office Email</h3>
+            <p class="office-value">
+              <a [href]="'mailto:' + officeDetails().email" class="contact-link">
+                {{ officeDetails().email }}
+              </a>
+            </p>
+          </div>
+
+          <div class="card office-card emergency-card">
+            <h3 class="office-label">Emergency Helpline</h3>
+            <p class="office-value">
+              <a [href]="'tel:' + officeDetails().emergencyHelpline" class="contact-link emergency-text">
+                {{ officeDetails().emergencyHelpline }}
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-title">{{ officeDetails().name }}</span>
+        <p class="footer-desc">Committed to safe, secure, and disciplined school transport operations.</p>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Basi Transportation Services. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
