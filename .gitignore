@@ -42,3 +42,12 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+
+# Local secrets (do not commit)
+appsettings.Development.json
