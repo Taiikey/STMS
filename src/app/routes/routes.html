@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<div class="page-container">
+
+  <header class="header">
+    <div class="header-inner">
+
+      <a routerLink="/" class="brand">
+        <img
+          src="basi_icon.png"
+          width="320"
+          height="179"
+          alt="Basi School Transportation Logo"
+          class="brand-logo"
+        />
+      </a>
+
+      <nav class="nav-menu">
+        <a routerLink="/" class="nav-link">Home</a>
+        <a routerLink="/transport" class="nav-link">Services</a>
+        <a routerLink="/routes" class="nav-link nav-link-active">Routes</a>
+      </nav>
+
+      <div class="nav-auth">
+        <a routerLink="/login" class="btn btn-outline">Log In</a>
+        <a routerLink="/register" class="btn btn-primary">Register</a>
+      </div>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        (click)="toggleMenu()"
+      >
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+
+    </div>
+
+    @if (isMenuOpen()) {
+      <nav class="mobile-nav">
+        <a routerLink="/" class="mobile-link" (click)="closeMenu()">Home</a>
+        <a routerLink="/transport" class="mobile-link" (click)="closeMenu()">Services</a>
+        <a routerLink="/routes" class="mobile-link" (click)="closeMenu()">Routes</a>
+
+        <div class="mobile-auth">
+          <a routerLink="/login" class="btn btn-outline" (click)="closeMenu()">Log In</a>
+          <a routerLink="/register" class="btn btn-primary" (click)="closeMenu()">Register</a>
+        </div>
+      </nav>
+    }
+  </header>
+
+  <main>
+
+    <section class="hero-section">
+      <div class="hero-container">
+        <h1 class="hero-title">School Routes and Stops</h1>
+
+        <p class="hero-description">
+          Find school transportation routes, their stops, and pickup times.
+        </p>
+
+        <div class="hero-actions">
+          <a routerLink="/transport" class="btn btn-primary">
+            View Services
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section routes-section">
+      <div class="section-container">
+
+        <div class="section-header">
+          <h2 class="section-title">Available Routes</h2>
+
+          <p class="section-subtitle">
+            Search by route name or number and select your service area.
+          </p>
+        </div>
+
+        <div class="filter-panel">
+
+          <div class="filter-field">
+            <label for="route-search">Search Routes</label>
+
+            <input
+              id="route-search"
+              type="text"
+              placeholder="Enter route name or number"
+              [value]="searchTerm()"
+              (input)="updateSearch($event)"
+            />
+          </div>
+
+          <div class="filter-field">
+            <label for="service-area">Service Area</label>
+
+            <select
+              id="service-area"
+              [value]="selectedArea()"
+              (change)="updateArea($event)"
+            >
+              <option value="All">All Areas</option>
+
+              @for (area of serviceAreas(); track area) {
+                <option [value]="area">{{ area }}</option>
+              }
+            </select>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-outline reset-btn"
+            (click)="resetFilters()"
+          >
+            Clear Filters
+          </button>
+
+        </div>
+
+        <div class="results-summary">
+          Showing {{ filteredRoutes().length }} of {{ routes().length }} routes
+        </div>
+
+        @if (filteredRoutes().length > 0) {
+          <div class="routes-grid">
+
+            @for (route of filteredRoutes(); track route.id) {
+              <div class="card route-card">
+
+                <div class="route-card-top">
+                  <div class="route-number">{{ route.routeNumber }}</div>
+                  <span class="status-pill">Available</span>
+                </div>
+
+                <h3 class="card-title">{{ route.routeName }}</h3>
+
+                <p class="route-area">
+                  Service Area: {{ route.serviceArea }}
+                </p>
+
+                <div class="route-destination">
+
+                  <div class="location-item">
+                    <span class="location-dot start-dot"></span>
+
+                    <div>
+                      <span class="detail-label">Starting Point</span>
+                      <p>{{ route.startingPoint }}</p>
+                    </div>
+                  </div>
+
+                  <div class="location-line"></div>
+
+                  <div class="location-item">
+                    <span class="location-dot end-dot"></span>
+
+                    <div>
+                      <span class="detail-label">Destination</span>
+                      <p>{{ route.destination }}</p>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="time-grid">
+                  <div class="time-box">
+                    <p class="mini-title">Morning Pickup</p>
+                    <strong>{{ route.pickupTime }}</strong>
+                  </div>
+
+                  <div class="time-box">
+                    <p class="mini-title">Afternoon Drop-off</p>
+                    <strong>{{ route.dropoffTime }}</strong>
+                  </div>
+                </div>
+
+                <div class="stops-preview">
+                  <h4>Stops</h4>
+
+                  <ol class="stops-list">
+                    @for (stop of route.stops; track stop.name) {
+                      <li>{{ stop.name }}</li>
+                    }
+                  </ol>
+                </div>
+
+                <button
+                  type="button"
+                  class="btn btn-primary details-btn"
+                  (click)="toggleDetails(route.id)"
+                >
+                  {{ selectedRouteId() === route.id ? 'Hide Details' : 'View Route Details' }}
+                </button>
+
+                @if (selectedRouteId() === route.id) {
+                  <div class="route-details">
+
+                    <h4>Route Details</h4>
+
+                    <p><strong>Route Number:</strong> {{ route.routeNumber }}</p>
+                    <p><strong>Service Area:</strong> {{ route.serviceArea }}</p>
+                    <p><strong>Starting Point:</strong> {{ route.startingPoint }}</p>
+                    <p><strong>Destination:</strong> {{ route.destination }}</p>
+
+                    <h5>Stop Schedule</h5>
+
+                    <ol class="detailed-stops">
+                      @for (stop of route.stops; track stop.name) {
+                        <li>
+                          <span>{{ stop.name }}</span>
+                          <span>{{ stop.pickupTime }}</span>
+                        </li>
+                      }
+                    </ol>
+
+                    <p class="schedule-note">
+                      These are sample schedules. Please confirm the actual
+                      times with the transportation office.
+                    </p>
+
+                    <a
+                      routerLink="/subscription"
+                      class="btn btn-primary details-subscribe"
+                    >
+                      Request Subscription
+                    </a>
+
+                  </div>
+                }
+
+              </div>
+            }
+
+          </div>
+        } @else {
+          <div class="empty-state">
+            <h3>No Routes Found</h3>
+            <p>Try a different route name or service area.</p>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="resetFilters()"
+            >
+              Show All Routes
+            </button>
+          </div>
+        }
+
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Need School Transportation?</h2>
+
+        <p class="cta-description">
+          Explore our transportation services and request a subscription.
+        </p>
+
+        <div class="cta-actions">
+          <a routerLink="/transport" class="btn btn-primary">
+            View Services
+          </a>
+
+          <a routerLink="/subscription" class="btn btn-outline">
+            Request Subscription
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+
+      <div class="footer-brand">
+        <span class="footer-title">Basi School Transportation</span>
+        <p class="footer-desc">Safe and reliable school transportation.</p>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Basi School Transportation. All rights reserved.</p>
+      </div>
+
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
