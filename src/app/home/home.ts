@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 interface TransportService {
   readonly title: string;
@@ -18,7 +19,7 @@ interface InformationCard {
 
 @Component({
   selector: 'app-home',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

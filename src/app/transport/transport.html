@@ -1,0 +1,193 @@
+<div class="page-container">
+  <header class="header">
+    <div class="header-inner">
+      <a routerLink="/" class="brand" aria-label="Basi School Transportation Home">
+        <img
+          ngSrc="basi_icon.png"
+          width="320"
+          height="179"
+          priority
+          alt="Basi School Transportation Logo"
+          class="brand-logo"
+        />
+      </a>
+
+      <!-- Menu -->
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <a routerLink="/" class="nav-link">Home</a>
+        <a routerLink="/transport" class="nav-link nav-link-active">Services</a>
+        <a routerLink="/routes" class="nav-link">Routes</a>
+      </nav>
+
+      <!-- Auth Actions -->
+      <div class="nav-auth">
+        <button type="button" class="btn btn-outline" aria-label="Log in to account">
+          Log In
+        </button>
+        <button type="button" class="btn btn-primary" aria-label="Register for transportation">
+          Register
+        </button>
+      </div>
+
+      <!-- Hamburger Button (mobile)-->
+      <button
+        type="button"
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+    </div>
+
+
+    <!-- Mobile Navigation Drawer -->
+    @if (isMenuOpen()) {
+      <nav class="mobile-nav" aria-label="Mobile Navigation">
+        <a routerLink="/" class="mobile-link" (click)="closeMenu()">Home</a>
+        <a routerLink="/transport" class="mobile-link" (click)="closeMenu()">Services</a>
+        <a routerLink="/routes" class="mobile-link" (click)="closeMenu()">Routes</a>
+        <div class="mobile-auth">
+          <button type="button" class="btn btn-outline full-width" (click)="closeMenu()">Log In</button>
+          <button type="button" class="btn btn-primary full-width" (click)="closeMenu()">Register</button>
+        </div>
+      </nav>
+    }
+  </header>
+
+
+
+
+
+  <main>
+    <section class="hero-section" aria-labelledby="transport-title">
+      <div class="hero-container">
+        <span class="tag">Transportation Services</span>
+        <h1 id="transport-title" class="hero-title">Choose the Transportation Plan That Fits Your Child</h1>
+        <p class="hero-description">
+          Compare the services offered by the school, see the fees and service areas, then view the
+          routes and stops or send a subscription request.
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/routes" class="btn btn-primary btn-lg">View Routes &amp; Stops</a>
+          <a routerLink="/subscription" class="btn btn-secondary btn-lg">Request Subscription</a>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <section id="services" class="section services-section" aria-labelledby="services-title">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">Available Services</span>
+          <h2 id="services-title" class="section-title">Our Transportation Options</h2>
+          <p class="section-subtitle">
+            Every option includes supervised buses and certified drivers.
+          </p>
+        </div>
+
+        <div class="cards-grid">
+          @for (service of services(); track service.title) {
+            <article class="card service-card">
+              <div class="service-icon-wrapper">
+                <img
+                  [ngSrc]="service.iconSrc"
+                  [width]="service.width"
+                  [height]="service.height"
+                  [alt]="service.iconAlt"
+                  class="service-icon-img"
+                />
+              </div>
+
+              <h3 class="card-title">{{ service.title }}</h3>
+              <p class="card-text">{{ service.description }}</p>
+
+              <div class="fee-box">
+                <span class="fee-amount">{{ service.fee }}</span>
+                <span class="fee-unit">{{ service.feeUnit }}</span>
+              </div>
+
+              <h4 class="mini-title">Service Areas</h4>
+              <div class="pill-row">
+                @for (area of service.serviceAreas; track area) {
+                  <span class="category-pill">{{ area }}</span>
+                }
+              </div>
+
+              <h4 class="mini-title">Subscription Conditions</h4>
+              <ul class="points-list">
+                @for (condition of service.conditions; track condition) {
+                  <li class="point-item">
+                    <span class="point-bullet" aria-hidden="true">✓</span>
+                    <span>{{ condition }}</span>
+                  </li>
+                }
+              </ul>
+
+              <div class="card-actions">
+                <a routerLink="/routes" class="btn btn-outline">View Routes</a>
+                <a routerLink="/subscription" class="btn btn-primary">Request Subscription</a>
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+
+
+    <section id="conditions" class="section info-section" aria-labelledby="conditions-title">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">Good to Know</span>
+          <h2 id="conditions-title" class="section-title">Subscription Conditions</h2>
+          <p class="section-subtitle">These rules apply to every transportation service.</p>
+        </div>
+
+
+        <div class="info-grid">
+          @for (item of generalConditions(); track item.title) {
+            <article class="card info-card">
+              <h3 class="card-title">{{ item.title }}</h3>
+              <p class="card-text">{{ item.text }}</p>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+
+    <section class="cta-section" aria-labelledby="cta-title">
+      <div class="cta-container">
+        <h2 id="cta-title" class="cta-title">Ready to Subscribe?</h2>
+        <p class="cta-description">
+          Log in to pick your student, route, and pickup stop, or register a parent account first.
+        </p>
+        <div class="cta-actions">
+          <button type="button" class="btn btn-dark btn-lg">Register</button>
+          <button type="button" class="btn btn-outline-white btn-lg">Parent Log In</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-title">Basi School Transportation Office</span>
+        <p class="footer-desc">Committed to safe, secure, and disciplined school transport operations.</p>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Basi Transportation Services. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
