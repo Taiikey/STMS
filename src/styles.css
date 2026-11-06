@@ -1,9 +1,10 @@
 /* Global styles & design tokens */
 :root {
-  --primary: #c99316;
-  --primary-hover: #b3800f;
-  --primary-light: #fef7e7;
-  --primary-text: #976b05;
+  --primary: #dfbe32;
+  --primary-hover: #caa924;
+  --primary-light: #fdfbe6;
+  --primary-text: #7d6608;
+  --primary-contrast: #0f172a;
   --dark: #0f172a;
   --dark-hover: #1e293b;
   --text-main: #0f172a;
@@ -11,8 +12,42 @@
   --text-subtle: #64748b;
   --bg-main: #ffffff;
   --bg-alt: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-header: #ffffff;
+  --bg-input: #ffffff;
   --border-color: #e2e8f0;
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --hero-bg: linear-gradient(180deg, #fdfbe6 0%, #ffffff 100%);
+  --cta-bg: #fdfbe6;
+  --border-cta: #f3e58c;
+  --border-emergency: #f59e0b;
+  --bg-emergency: #fffbeb;
+  --text-emergency: #b45309;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  --primary: #dfbe32;
+  --primary-hover: #ecd048;
+  --primary-light: rgba(223, 190, 50, 0.14);
+  --primary-text: #dfbe32;
+  --primary-contrast: #0f172a;
+  --dark: #090d16;
+  --dark-hover: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --bg-main: #0b1120;
+  --bg-alt: #070b14;
+  --bg-card: #111a2e;
+  --bg-header: #0b1120;
+  --bg-input: #152037;
+  --border-color: #1e293b;
+  --hero-bg: linear-gradient(180deg, #182235 0%, #0b1120 100%);
+  --cta-bg: rgba(223, 190, 50, 0.12);
+  --border-cta: #3e3512;
+  --border-emergency: #78350f;
+  --bg-emergency: #241407;
+  --text-emergency: #fde68a;
 }
 
 *, *::before, *::after {
@@ -26,6 +61,7 @@ html {
   font-family: var(--font-family);
   color: var(--text-main);
   background-color: var(--bg-main);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body {
@@ -60,7 +96,8 @@ button {
 
 .btn-primary {
   background-color: var(--primary);
-  color: #fff;
+  color: var(--primary-contrast);
+  font-weight: 700;
 }
 
 .btn-primary:hover {
@@ -68,9 +105,9 @@ button {
 }
 
 .btn-secondary {
-  background-color: #fff;
-  color: var(--primary);
-  border-color: var(--primary);
+  background-color: transparent;
+  color: var(--primary-text);
+  border: 1.5px solid var(--primary);
 }
 
 .btn-secondary:hover {
@@ -80,17 +117,22 @@ button {
 .btn-outline {
   background-color: transparent;
   color: var(--text-main);
-  border-color: #cbd5e1;
+  border-color: var(--border-color);
 }
 
 .btn-outline:hover {
-  border-color: var(--text-main);
+  border-color: var(--primary);
   background-color: var(--bg-alt);
 }
 
 .btn-dark {
   background-color: var(--dark);
   color: #fff;
+}
+
+[data-theme="dark"] .btn-dark {
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
 .btn-dark:hover {
@@ -105,7 +147,7 @@ button {
 
 .btn-outline-white:hover {
   background-color: var(--text-main);
-  color: #fff;
+  color: var(--bg-main);
 }
 
 .btn-lg {
@@ -117,18 +159,46 @@ button {
   width: 100%;
 }
 
+/* Header Action Controls (Theme & Language) */
+.header-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.55rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  border-color: var(--primary);
+  background-color: var(--bg-alt);
+}
+
 /* Common Card & Badges */
 .card {
-  background-color: #fff;
+  background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.75rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
 }
 
 .tag, .category-pill {
@@ -172,7 +242,7 @@ button {
 
 .section-badge {
   display: inline-block;
-  color: var(--primary);
+  color: var(--primary-text);
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -191,4 +261,39 @@ button {
   font-size: 1rem;
   color: var(--text-subtle);
   line-height: 1.6;
+}
+
+/* Footer layout */
+.footer {
+  background-color: var(--dark);
+  color: #94a3b8;
+  padding: 2.5rem 1.5rem 2rem;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.footer-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.footer-desc {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.footer-bottom {
+  padding-top: 1.25rem;
+  border-top: 1px solid #1e293b;
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
 }

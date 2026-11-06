@@ -14,3 +14,20 @@ export const routes: Routes = [
     loadComponent: () => import('./routes/routes').then((m) => m.Routes),
   },
 ];
+    path: 'register',
+    loadComponent: () =>
+      import('./parent-registration/parent-registration').then(
+        (m) => m.ParentRegistration
+      ),
+  },
+  {
+    path: 'parent-registration',
+    redirectTo: 'register',
+    pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
+];
