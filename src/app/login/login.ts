@@ -1,14 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
+import { Header } from '../header/header';
 import { PreferencesService } from '../services/preferences.service';
 
 const STRICT_EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, NgOptimizedImage],
+  imports: [ReactiveFormsModule, RouterLink, Header],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
