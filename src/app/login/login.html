@@ -1,0 +1,120 @@
+<div class="login-layout">
+  <header class="login-header">
+    <div class="header-inner">
+      <a routerLink="/" class="header-brand" aria-label="Return to home page">
+        <img
+          ngSrc="basi_icon.png"
+          width="160"
+          height="89"
+          priority
+          alt="Basi Logo"
+          class="header-logo"
+        />
+      </a>
+
+      <div class="header-controls">
+        <button
+          type="button"
+          class="btn-icon"
+          (click)="prefs.toggleLanguage()"
+          [attr.aria-label]="prefs.lang() === 'en' ? 'التحويل إلى العربية' : 'Switch to English'"
+          [title]="prefs.lang() === 'en' ? 'العربية' : 'English'"
+        >
+          {{ prefs.lang() === 'en' ? 'العربية' : 'EN' }}
+        </button>
+        <button
+          type="button"
+          class="btn-icon"
+          (click)="prefs.toggleTheme()"
+          [attr.aria-label]="prefs.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+          [title]="prefs.isDark() ? 'Light Mode' : 'Dark Mode'"
+        >
+          {{ prefs.isDark() ? '☀️' : '🌙' }}
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="login-main">
+    <div class="login-card card">
+      <div class="card-header">
+        <h1 class="card-title">{{ t().loginTitle }}</h1>
+        <p class="card-description">
+          {{ t().loginSubtitle }}
+        </p>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error" role="alert">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      @if (successMessage()) {
+        <div class="alert alert-success" role="status">
+          {{ successMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="form-container">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">{{ t().loginEmailLabel }}</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-input"
+            [class.input-error]="isFieldInvalid('email')"
+            [placeholder]="t().loginEmailPlaceholder"
+            autocomplete="email"
+          />
+          @if (isFieldInvalid('email')) {
+            <p class="field-error">{{ t().loginEmailError }}</p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password" class="form-label">{{ t().loginPasswordLabel }}</label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="form-input"
+            [class.input-error]="isFieldInvalid('password')"
+            [placeholder]="t().loginPasswordPlaceholder"
+            autocomplete="current-password"
+          />
+          @if (isFieldInvalid('password')) {
+            <p class="field-error">{{ t().loginPasswordError }}</p>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn btn-primary full-width btn-lg"
+            [disabled]="isSubmitting()"
+          >
+            @if (isSubmitting()) {
+              <span>{{ t().loginSubmittingBtn }}</span>
+            } @else {
+              <span>{{ t().loginSubmitBtn }}</span>
+            }
+          </button>
+        </div>
+      </form>
+
+      <!-- Registration Link -->
+      <div class="card-footer">
+        <p class="register-prompt">
+          {{ t().loginNoAccountPrompt }}
+          <a routerLink="/register" class="register-link">{{ t().loginRegisterLink }}</a>
+        </p>
+      </div>
+    </div>
+  </main>
+</div>
+
