@@ -1,121 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
 <div class="page-container">
 
-  <header class="header">
-    <div class="header-inner">
-
-      <a routerLink="/" class="brand">
-        <img
-          src="basi_icon.png"
-          width="320"
-          height="179"
-          alt="Basi School Transportation Logo"
-          class="brand-logo"
-        />
-      </a>
-
-      <nav class="nav-menu">
-        <a routerLink="/" class="nav-link">Home</a>
-        <a routerLink="/transport" class="nav-link">Services</a>
-        <a routerLink="/routes" class="nav-link nav-link-active">Routes</a>
-      </nav>
-
-      <div class="nav-auth">
-        <a routerLink="/login" class="btn btn-outline">Log In</a>
-        <a routerLink="/register" class="btn btn-primary">Register</a>
-      </div>
-
-      <button
-        class="menu-toggle"
-        type="button"
-        (click)="toggleMenu()"
-      >
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-        <span class="menu-bar"></span>
-      </button>
-
-    </div>
-
-    @if (isMenuOpen()) {
-      <nav class="mobile-nav">
-        <a routerLink="/" class="mobile-link" (click)="closeMenu()">Home</a>
-        <a routerLink="/transport" class="mobile-link" (click)="closeMenu()">Services</a>
-        <a routerLink="/routes" class="mobile-link" (click)="closeMenu()">Routes</a>
-
-        <div class="mobile-auth">
-          <a routerLink="/login" class="btn btn-outline" (click)="closeMenu()">Log In</a>
-          <a routerLink="/register" class="btn btn-primary" (click)="closeMenu()">Register</a>
-        </div>
-      </nav>
-    }
-  </header>
+  <app-header />
 
   <main>
 
+    <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-container">
-        <h1 class="hero-title">School Routes and Stops</h1>
+
+        <h1 class="hero-title">
+          {{ translate('School Routes and Stops') }}
+        </h1>
 
         <p class="hero-description">
-          Find school transportation routes, their stops, and pickup times.
+          {{ translate('Find school transportation routes, their stops, and pickup times.') }}
         </p>
 
         <div class="hero-actions">
           <a routerLink="/transport" class="btn btn-primary">
-            View Services
+            {{ translate('View Services') }}
           </a>
         </div>
+
       </div>
     </section>
 
+    <!-- Routes Section -->
     <section class="section routes-section">
       <div class="section-container">
 
         <div class="section-header">
-          <h2 class="section-title">Available Routes</h2>
+
+          <h2 class="section-title">
+            {{ translate('Available Routes') }}
+          </h2>
 
           <p class="section-subtitle">
-            Search by route name or number and select your service area.
+            {{ translate('Search by route name or number and select your service area.') }}
           </p>
+
         </div>
 
+        <!-- Search and Filters -->
         <div class="filter-panel">
 
           <div class="filter-field">
-            <label for="route-search">Search Routes</label>
+
+            <label for="route-search">
+              {{ translate('Search Routes') }}
+            </label>
 
             <input
               id="route-search"
               type="text"
-              placeholder="Enter route name or number"
+              [placeholder]="translate('Enter route name or number')"
               [value]="searchTerm()"
               (input)="updateSearch($event)"
             />
+
           </div>
 
           <div class="filter-field">
-            <label for="service-area">Service Area</label>
+
+            <label for="service-area">
+              {{ translate('Service Area') }}
+            </label>
 
             <select
               id="service-area"
               [value]="selectedArea()"
               (change)="updateArea($event)"
             >
-              <option value="All">All Areas</option>
+
+              <option value="All">
+                {{ translate('All Areas') }}
+              </option>
 
               @for (area of serviceAreas(); track area) {
-                <option [value]="area">{{ area }}</option>
+                <option [value]="area">
+                  {{ translate(area) }}
+                </option>
               }
+
             </select>
+
           </div>
 
           <button
@@ -123,182 +91,487 @@
             class="btn btn-outline reset-btn"
             (click)="resetFilters()"
           >
-            Clear Filters
+            {{ translate('Clear Filters') }}
           </button>
 
         </div>
 
+        <!-- Results Summary -->
         <div class="results-summary">
-          Showing {{ filteredRoutes().length }} of {{ routes().length }} routes
+          {{ translate('Showing') }}
+          {{ filteredRoutes().length }}
+          {{ translate('of') }}
+          {{ routes().length }}
+          {{ translate('routes') }}
         </div>
 
+        <!-- Route Cards -->
         @if (filteredRoutes().length > 0) {
+
           <div class="routes-grid">
 
             @for (route of filteredRoutes(); track route.id) {
+
               <div class="card route-card">
 
+                <!-- Route Card Header -->
                 <div class="route-card-top">
-                  <div class="route-number">{{ route.routeNumber }}</div>
-                  <span class="status-pill">Available</span>
+
+                  <div class="route-number">
+                    {{ route.routeNumber }}
+                  </div>
+
+                  @if (route.isActive && remainingSeats(route) > 0) {
+
+                    <span class="status-pill">
+                      {{ translate('Available') }}
+                    </span>
+
+                  } @else if (!route.isActive) {
+
+                    <span class="status-pill status-inactive">
+                      {{ translate('Inactive') }}
+                    </span>
+
+                  } @else {
+
+                    <span class="status-pill status-full">
+                      {{ translate('Full') }}
+                    </span>
+
+                  }
+
                 </div>
 
-                <h3 class="card-title">{{ route.routeName }}</h3>
+                <h3 class="card-title">
+                  {{ translate(route.routeName) }}
+                </h3>
 
                 <p class="route-area">
-                  Service Area: {{ route.serviceArea }}
+                  {{ translate('Service Area:') }}
+                  {{ translate(route.serviceArea) }}
                 </p>
 
+                <!-- Starting Point and Destination -->
                 <div class="route-destination">
 
                   <div class="location-item">
+
                     <span class="location-dot start-dot"></span>
 
                     <div>
-                      <span class="detail-label">Starting Point</span>
-                      <p>{{ route.startingPoint }}</p>
+                      <span class="detail-label">
+                        {{ translate('Starting Point') }}
+                      </span>
+
+                      <p>{{ translate(route.startingPoint) }}</p>
                     </div>
+
                   </div>
 
                   <div class="location-line"></div>
 
                   <div class="location-item">
+
                     <span class="location-dot end-dot"></span>
 
                     <div>
-                      <span class="detail-label">Destination</span>
-                      <p>{{ route.destination }}</p>
+                      <span class="detail-label">
+                        {{ translate('Destination') }}
+                      </span>
+
+                      <p>{{ translate(route.destination) }}</p>
                     </div>
+
                   </div>
 
                 </div>
 
+                <!-- General Pickup and Drop-off Times -->
                 <div class="time-grid">
+
                   <div class="time-box">
-                    <p class="mini-title">Morning Pickup</p>
+
+                    <p class="mini-title">
+                      {{ translate('Morning Pickup') }}
+                    </p>
+
                     <strong>{{ route.pickupTime }}</strong>
+
                   </div>
 
                   <div class="time-box">
-                    <p class="mini-title">Afternoon Drop-off</p>
+
+                    <p class="mini-title">
+                      {{ translate('Afternoon Drop-off') }}
+                    </p>
+
                     <strong>{{ route.dropoffTime }}</strong>
+
                   </div>
+
                 </div>
 
+                <!-- Stops Preview -->
                 <div class="stops-preview">
-                  <h4>Stops</h4>
+
+                  <h4>{{ translate('Stops') }}</h4>
 
                   <ol class="stops-list">
+
                     @for (stop of route.stops; track stop.name) {
-                      <li>{{ stop.name }}</li>
+                      <li>{{ translate(stop.name) }}</li>
                     }
+
                   </ol>
+
                 </div>
 
+                <!-- Expand / Collapse Button -->
                 <button
                   type="button"
                   class="btn btn-primary details-btn"
                   (click)="toggleDetails(route.id)"
+                  [attr.aria-expanded]="selectedRouteId() === route.id"
                 >
-                  {{ selectedRouteId() === route.id ? 'Hide Details' : 'View Route Details' }}
+                  {{
+                    translate(
+                      selectedRouteId() === route.id
+                        ? 'Hide Details'
+                        : 'View Route Details'
+                    )
+                  }}
                 </button>
 
+                <!-- Expanded Route Details -->
                 @if (selectedRouteId() === route.id) {
+
                   <div class="route-details">
 
-                    <h4>Route Details</h4>
+                    <h4>
+                      {{ translate('Complete Route Details') }}
+                    </h4>
 
-                    <p><strong>Route Number:</strong> {{ route.routeNumber }}</p>
-                    <p><strong>Service Area:</strong> {{ route.serviceArea }}</p>
-                    <p><strong>Starting Point:</strong> {{ route.startingPoint }}</p>
-                    <p><strong>Destination:</strong> {{ route.destination }}</p>
+                    <div class="details-information">
 
-                    <h5>Stop Schedule</h5>
+                      <p>
+                        <strong>
+                          {{ translate('Route Number:') }}
+                        </strong>
+                        {{ route.routeNumber }}
+                      </p>
 
-                    <ol class="detailed-stops">
-                      @for (stop of route.stops; track stop.name) {
-                        <li>
-                          <span>{{ stop.name }}</span>
-                          <span>{{ stop.pickupTime }}</span>
-                        </li>
-                      }
-                    </ol>
+                      <p>
+                        <strong>
+                          {{ translate('Route Name:') }}
+                        </strong>
+                        {{ translate(route.routeName) }}
+                      </p>
 
+                      <p>
+                        <strong>
+                          {{ translate('Service Area:') }}
+                        </strong>
+                        {{ translate(route.serviceArea) }}
+                      </p>
+
+                      <p>
+                        <strong>
+                          {{ translate('Starting Point:') }}
+                        </strong>
+                        {{ translate(route.startingPoint) }}
+                      </p>
+
+                      <p>
+                        <strong>
+                          {{ translate('Destination:') }}
+                        </strong>
+                        {{ translate(route.destination) }}
+                      </p>
+
+                      <p>
+                        <strong>
+                          {{ translate('Route Status:') }}
+                        </strong>
+
+                        @if (route.isActive) {
+                          <span class="active-text">
+                            {{ translate('Active') }}
+                          </span>
+                        } @else {
+                          <span class="inactive-text">
+                            {{ translate('Inactive') }}
+                          </span>
+                        }
+
+                      </p>
+
+                    </div>
+
+                    <!-- Individual Stop Schedules -->
+                    <h5>
+                      {{ translate('Stops and Pickup / Drop-off Schedules') }}
+                    </h5>
+
+                    <div class="schedule-table-wrapper">
+
+                      <table class="schedule-table">
+
+                        <thead>
+                          <tr>
+                            <th>{{ translate('Stop') }}</th>
+                            <th>{{ translate('Morning Pickup') }}</th>
+                            <th>{{ translate('Afternoon Drop-off') }}</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+
+                          @for (stop of route.stops; track stop.name) {
+
+                            <tr>
+                              <td>{{ translate(stop.name) }}</td>
+                              <td>{{ stop.pickupTime }}</td>
+                              <td>{{ stop.dropoffTime }}</td>
+                            </tr>
+
+                          }
+
+                        </tbody>
+
+                      </table>
+
+                    </div>
+
+                    <!-- Bus and Driver Information -->
+                    <h5>
+                      {{ translate('Assigned Bus and Driver') }}
+                    </h5>
+
+                    <div class="assignment-grid">
+
+                      <div class="assignment-box">
+
+                        <span class="detail-label">
+                          {{ translate('Assigned Bus') }}
+                        </span>
+
+                        <strong>
+                          {{ route.assignedBus || translate('Not assigned yet') }}
+                        </strong>
+
+                      </div>
+
+                      <div class="assignment-box">
+
+                        <span class="detail-label">
+                          {{ translate('Assigned Driver') }}
+                        </span>
+
+                        <strong>
+                          {{ route.assignedDriver || translate('Not assigned yet') }}
+                        </strong>
+
+                      </div>
+
+                    </div>
+
+                    <!-- Capacity Information -->
+                    <h5>
+                      {{ translate('Route Capacity') }}
+                    </h5>
+
+                    <div class="capacity-box">
+
+                      <div class="capacity-numbers">
+
+                        <div>
+                          <span class="detail-label">
+                            {{ translate('Total Capacity') }}
+                          </span>
+
+                          <strong>
+                            {{ route.capacity }}
+                            {{ translate('students') }}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <span class="detail-label">
+                            {{ translate('Registered Students') }}
+                          </span>
+
+                          <strong>
+                            {{ route.enrolledStudents }}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <span class="detail-label">
+                            {{ translate('Remaining Seats') }}
+                          </span>
+
+                          <strong
+                            [class.no-seats]="remainingSeats(route) === 0"
+                          >
+                            {{ remainingSeats(route) }}
+                          </strong>
+                        </div>
+
+                      </div>
+
+                      <div
+                        class="capacity-progress"
+                        role="progressbar"
+                        [attr.aria-valuenow]="route.enrolledStudents"
+                        [attr.aria-valuemin]="0"
+                        [attr.aria-valuemax]="route.capacity"
+                      >
+
+                        <div
+                          class="capacity-progress-fill"
+                          [style.width.%]="
+                            route.capacity > 0
+                              ? (route.enrolledStudents / route.capacity) * 100
+                              : 0
+                          "
+                        ></div>
+
+                      </div>
+
+                    </div>
+
+                    <!-- Schedule Notice -->
                     <p class="schedule-note">
-                      These are sample schedules. Please confirm the actual
-                      times with the transportation office.
+                      {{ translate('These are demonstration schedules and capacity figures. Actual information should be confirmed with the transportation office.') }}
                     </p>
 
-                    <a
-                      routerLink="/subscription"
-                      class="btn btn-primary details-subscribe"
-                    >
-                      Request Subscription
-                    </a>
+                    <!-- Transportation Request -->
+                    <div class="details-subscribe">
+
+                      @if (canRequestTransportation(route)) {
+
+                        <a
+                          routerLink="/subscription"
+                          class="btn btn-primary"
+                        >
+                          {{ translate('Request Transportation') }}
+                        </a>
+
+                      } @else {
+
+                        <button
+                          type="button"
+                          class="btn btn-disabled"
+                          disabled
+                        >
+
+                          @if (!route.isActive) {
+                            {{ translate('Route Currently Inactive') }}
+                          } @else {
+                            {{ translate('No Seats Available') }}
+                          }
+
+                        </button>
+
+                      }
+
+                    </div>
 
                   </div>
+
                 }
 
               </div>
+
             }
 
           </div>
+
         } @else {
+
+          <!-- No Results -->
           <div class="empty-state">
-            <h3>No Routes Found</h3>
-            <p>Try a different route name or service area.</p>
+
+            <h3>{{ translate('No Routes Found') }}</h3>
+
+            <p>
+              {{ translate('Try a different route name or service area.') }}
+            </p>
 
             <button
               type="button"
               class="btn btn-primary"
               (click)="resetFilters()"
             >
-              Show All Routes
+              {{ translate('Show All Routes') }}
             </button>
+
           </div>
+
         }
 
       </div>
     </section>
 
+    <!-- Call to Action -->
     <section class="cta-section">
+
       <div class="cta-container">
-        <h2 class="cta-title">Need School Transportation?</h2>
+
+        <h2 class="cta-title">
+          {{ translate('Need School Transportation?') }}
+        </h2>
 
         <p class="cta-description">
-          Explore our transportation services and request a subscription.
+          {{ translate('Explore our transportation services and request a subscription.') }}
         </p>
 
         <div class="cta-actions">
+
           <a routerLink="/transport" class="btn btn-primary">
-            View Services
+            {{ translate('View Services') }}
           </a>
 
           <a routerLink="/subscription" class="btn btn-outline">
-            Request Subscription
+            {{ translate('Request Subscription') }}
           </a>
+
         </div>
+
       </div>
+
     </section>
 
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
+
     <div class="footer-container">
 
       <div class="footer-brand">
-        <span class="footer-title">Basi School Transportation</span>
-        <p class="footer-desc">Safe and reliable school transportation.</p>
+
+        <span class="footer-title">
+          {{ translate('Basi School Transportation') }}
+        </span>
+
+        <p class="footer-desc">
+          {{ translate('Safe and reliable school transportation.') }}
+        </p>
+
       </div>
 
       <div class="footer-bottom">
-        <p>© 2026 Basi School Transportation. All rights reserved.</p>
+
+        <p>
+          {{ translate('© 2026 Basi School Transportation. All rights reserved.') }}
+        </p>
+
       </div>
 
     </div>
+
   </footer>
 
 </div>
-
-</body>
-</html>

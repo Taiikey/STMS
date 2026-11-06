@@ -1,3 +1,4 @@
+
 <div class="page-container">
   <app-header />
 
@@ -13,9 +14,15 @@
           {{ t().heroDesc }}
         </p>
         <div class="hero-actions">
-          <a href="#services" class="btn btn-primary btn-lg">{{ t().heroViewServices }}</a>
-          <a routerLink="/register" class="btn btn-secondary btn-lg">{{ t().heroRegisterNow }}</a>
-          <a routerLink="/login" class="btn btn-outline btn-lg">{{ t().heroLogin }}</a>
+          <a routerLink="/transport" class="btn btn-primary btn-lg">
+            {{ t().heroViewServices }}
+          </a>
+          <a routerLink="/register" class="btn btn-secondary btn-lg">
+            {{ t().heroRegisterNow }}
+          </a>
+          <a routerLink="/login" class="btn btn-outline btn-lg">
+            {{ t().heroLogin }}
+          </a>
         </div>
       </div>
     </section>
