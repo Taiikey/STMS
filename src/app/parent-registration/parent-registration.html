@@ -1,39 +1,5 @@
 <div class="registration-layout">
-  <header class="registration-header">
-    <div class="header-inner">
-      <a routerLink="/" class="header-brand" aria-label="Return to home page">
-        <img
-          ngSrc="basi_icon.png"
-          width="160"
-          height="89"
-          priority
-          alt="Basi Logo"
-          class="header-logo"
-        />
-      </a>
-
-      <div class="header-controls">
-        <button
-          type="button"
-          class="btn-icon"
-          (click)="prefs.toggleLanguage()"
-          [attr.aria-label]="prefs.lang() === 'en' ? 'التحويل إلى العربية' : 'Switch to English'"
-          [title]="prefs.lang() === 'en' ? 'العربية' : 'English'"
-        >
-          {{ prefs.lang() === 'en' ? 'العربية' : 'EN' }}
-        </button>
-        <button
-          type="button"
-          class="btn-icon"
-          (click)="prefs.toggleTheme()"
-          [attr.aria-label]="prefs.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
-          [title]="prefs.isDark() ? 'Light Mode' : 'Dark Mode'"
-        >
-          {{ prefs.isDark() ? '☀️' : '🌙' }}
-        </button>
-      </div>
-    </div>
-  </header>
+  <app-header [variant]="'minimal'" />
 
   <main class="registration-main">
     <div class="registration-card card">

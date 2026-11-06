@@ -1,19 +1,18 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Header } from '../header/header';
 import { PreferencesService } from '../services/preferences.service';
 
 @Component({
   selector: 'app-home',
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, Header],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
   protected readonly prefs = inject(PreferencesService);
   protected readonly t = this.prefs.t;
-
-  protected readonly isMenuOpen = signal(false);
 
   protected readonly serviceList = computed(() => this.t().serviceList);
   protected readonly infoCards = computed(() => this.t().infoCards);
@@ -22,16 +21,8 @@ export class Home {
     name: this.t().officeName,
     location: this.t().officeLocationVal,
     workingHours: this.t().officeHoursVal,
-    phone: '+962 7854 57267',
-    emergencyHelpline: '+966 50 123 4567',
-    email: 'Saleh_Alhkhatib@outlook.com',
+    phone: '+962 6 500 0000',
+    emergencyHelpline: '+962 79 000 0000',
+    email: 'transport@basi.edu',
   }));
-
-  protected toggleMenu(): void {
-    this.isMenuOpen.update((open) => !open);
-  }
-
-  protected closeMenu(): void {
-    this.isMenuOpen.set(false);
-  }
 }

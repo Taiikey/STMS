@@ -7,9 +7,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
 import { RegistrationService } from '../services/registration.service';
 import { PreferencesService } from '../services/preferences.service';
+
+import { Header } from '../header/header';
 
 export function jordanianPhoneValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) {
@@ -33,7 +34,7 @@ const STRICT_EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 @Component({
   selector: 'app-parent-registration',
-  imports: [ReactiveFormsModule, RouterLink, NgOptimizedImage],
+  imports: [ReactiveFormsModule, RouterLink, Header],
   templateUrl: './parent-registration.html',
   styleUrl: './parent-registration.css',
 })
