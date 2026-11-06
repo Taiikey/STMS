@@ -15,19 +15,40 @@
 
       <!-- Desktop Navigation Menu -->
       <nav class="nav-menu" aria-label="Main Navigation">
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#information" class="nav-link">Routes & Safety</a>
-        <a href="#office" class="nav-link">Office & Contact</a>
+        <a href="#services" class="nav-link">{{ t().navServices }}</a>
+        <a href="#information" class="nav-link">{{ t().navRoutesSafety }}</a>
+        <a href="#office" class="nav-link">{{ t().navOfficeContact }}</a>
       </nav>
 
-      <!-- Auth Actions -->
+      <!-- Auth Actions & Preference Controls -->
       <div class="nav-auth">
+        <div class="header-controls">
+          <button
+            type="button"
+            class="btn-icon"
+            (click)="prefs.toggleLanguage()"
+            [attr.aria-label]="prefs.lang() === 'en' ? 'التحويل إلى العربية' : 'Switch to English'"
+            [title]="prefs.lang() === 'en' ? 'العربية' : 'English'"
+          >
+            {{ prefs.lang() === 'en' ? 'العربية' : 'EN' }}
+          </button>
+          <button
+            type="button"
+            class="btn-icon"
+            (click)="prefs.toggleTheme()"
+            [attr.aria-label]="prefs.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+            [title]="prefs.isDark() ? 'Light Mode' : 'Dark Mode'"
+          >
+            {{ prefs.isDark() ? '☀️' : '🌙' }}
+          </button>
+        </div>
+
         <button type="button" class="btn btn-outline" aria-label="Log in to account">
-          Log In
+          {{ t().navLogin }}
         </button>
-        <button type="button" class="btn btn-primary" aria-label="Register for transportation">
-          Register
-        </button>
+        <a routerLink="/register" class="btn btn-primary" aria-label="Register for transportation">
+          {{ t().navRegister }}
+        </a>
       </div>
 
       <!-- Mobile Hamburger Button -->
@@ -47,12 +68,34 @@
     <!-- Mobile Navigation Drawer -->
     @if (isMenuOpen()) {
       <nav class="mobile-nav" aria-label="Mobile Navigation">
-        <a href="#services" class="mobile-link" (click)="closeMenu()">Services</a>
-        <a href="#information" class="mobile-link" (click)="closeMenu()">Routes & Safety</a>
-        <a href="#office" class="mobile-link" (click)="closeMenu()">Office & Contact</a>
+        <a href="#services" class="mobile-link" (click)="closeMenu()">{{ t().navServices }}</a>
+        <a href="#information" class="mobile-link" (click)="closeMenu()">{{ t().navRoutesSafety }}</a>
+        <a href="#office" class="mobile-link" (click)="closeMenu()">{{ t().navOfficeContact }}</a>
+        
+        <div class="header-controls mobile-controls">
+          <button
+            type="button"
+            class="btn-icon"
+            (click)="prefs.toggleLanguage()"
+          >
+            {{ prefs.lang() === 'en' ? 'العربية' : 'English' }}
+          </button>
+          <button
+            type="button"
+            class="btn-icon"
+            (click)="prefs.toggleTheme()"
+          >
+            {{ prefs.isDark() ? '☀️ Light' : '🌙 Dark' }}
+          </button>
+        </div>
+
         <div class="mobile-auth">
-          <button type="button" class="btn btn-outline full-width" (click)="closeMenu()">Log In</button>
-          <button type="button" class="btn btn-primary full-width" (click)="closeMenu()">Register</button>
+          <button type="button" class="btn btn-outline full-width" (click)="closeMenu()">
+            {{ t().navLogin }}
+          </button>
+          <a routerLink="/register" class="btn btn-primary full-width" (click)="closeMenu()">
+            {{ t().navRegister }}
+          </a>
         </div>
       </nav>
     }
@@ -62,17 +105,17 @@
     <!-- Hero / Introduction Section -->
     <section class="hero-section" aria-labelledby="hero-title">
       <div class="hero-container">
-        <span class="tag">School Transport Services</span>
+        <span class="tag">{{ t().heroTag }}</span>
         <h1 id="hero-title" class="hero-title">
-          Safe, Punctual & Reliable School Transportation
+          {{ t().heroTitle }}
         </h1>
         <p class="hero-description">
-          Welcome to Basi School Transportation. We ensure students arrive safely and comfortably each day with certified drivers, supervised vehicles, and structured neighborhood routes.
+          {{ t().heroDesc }}
         </p>
         <div class="hero-actions">
-          <a href="#services" class="btn btn-primary btn-lg">View Services</a>
-          <a href="#register-cta" class="btn btn-secondary btn-lg">Register Now</a>
-          <button type="button" class="btn btn-outline btn-lg">Log In</button>
+          <a href="#services" class="btn btn-primary btn-lg">{{ t().heroViewServices }}</a>
+          <a routerLink="/register" class="btn btn-secondary btn-lg">{{ t().heroRegisterNow }}</a>
+          <button type="button" class="btn btn-outline btn-lg">{{ t().heroLogin }}</button>
         </div>
       </div>
     </section>
@@ -81,10 +124,10 @@
     <section id="services" class="section services-section" aria-labelledby="services-title">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">Our Services</span>
-          <h2 id="services-title" class="section-title">Transportation Services Offered</h2>
+          <span class="section-badge">{{ t().servicesBadge }}</span>
+          <h2 id="services-title" class="section-title">{{ t().servicesTitle }}</h2>
           <p class="section-subtitle">
-            Providing tailored and secure transit solutions for all students throughout the school year.
+            {{ t().servicesSubtitle }}
           </p>
         </div>
 
@@ -107,7 +150,7 @@
         </div>
 
         <div class="section-action">
-          <a href="#register-cta" class="btn btn-primary">Register for Transport Services</a>
+          <a routerLink="/register" class="btn btn-primary">{{ t().servicesActionBtn }}</a>
         </div>
       </div>
     </section>
@@ -116,10 +159,10 @@
     <section id="information" class="section info-section" aria-labelledby="info-title">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">Guidelines</span>
-          <h2 id="info-title" class="section-title">Routes, Arrangements & Safety Procedures</h2>
+          <span class="section-badge">{{ t().infoBadge }}</span>
+          <h2 id="info-title" class="section-title">{{ t().infoTitle }}</h2>
           <p class="section-subtitle">
-            Clear guidelines to maintain safe travel, predictable schedules, and orderly arrangements.
+            {{ t().infoSubtitle }}
           </p>
         </div>
 
@@ -145,13 +188,13 @@
     <!-- Registration Call To Action -->
     <section id="register-cta" class="cta-section" aria-labelledby="cta-title">
       <div class="cta-container">
-        <h2 id="cta-title" class="cta-title">Register for School Transportation</h2>
+        <h2 id="cta-title" class="cta-title">{{ t().ctaTitle }}</h2>
         <p class="cta-description">
-          Enroll your student for the upcoming term or log in to manage your transport route and student schedule.
+          {{ t().ctaDesc }}
         </p>
         <div class="cta-actions">
-          <button type="button" class="btn btn-dark btn-lg">Register Student</button>
-          <button type="button" class="btn btn-outline-white btn-lg">Parent Log In</button>
+          <a routerLink="/register" class="btn btn-dark btn-lg">{{ t().ctaRegisterBtn }}</a>
+          <button type="button" class="btn btn-outline-white btn-lg">{{ t().ctaLoginBtn }}</button>
         </div>
       </div>
     </section>
@@ -160,46 +203,46 @@
     <section id="office" class="section office-section" aria-labelledby="office-title">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">Support & Location</span>
-          <h2 id="office-title" class="section-title">Transportation Office Details</h2>
+          <span class="section-badge">{{ t().officeBadge }}</span>
+          <h2 id="office-title" class="section-title">{{ t().officeTitle }}</h2>
           <p class="section-subtitle">
-            Have questions regarding bus routes or transport registrations? Contact our office team.
+            {{ t().officeSubtitle }}
           </p>
         </div>
 
         <div class="office-grid">
           <div class="card office-card">
-            <h3 class="office-label">Office Location</h3>
+            <h3 class="office-label">{{ t().officeLocationLabel }}</h3>
             <p class="office-value">{{ officeDetails().location }}</p>
           </div>
 
           <div class="card office-card">
-            <h3 class="office-label">Working Hours</h3>
+            <h3 class="office-label">{{ t().officeHoursLabel }}</h3>
             <p class="office-value">{{ officeDetails().workingHours }}</p>
           </div>
 
           <div class="card office-card">
-            <h3 class="office-label">Direct Office Phone</h3>
+            <h3 class="office-label">{{ t().officePhoneLabel }}</h3>
             <p class="office-value">
-              <a [href]="'tel:' + officeDetails().phone" class="contact-link">
+              <a [href]="'tel:' + officeDetails().phone" class="contact-link" dir="ltr">
                 {{ officeDetails().phone }}
               </a>
             </p>
           </div>
 
           <div class="card office-card">
-            <h3 class="office-label">Office Email</h3>
+            <h3 class="office-label">{{ t().officeEmailLabel }}</h3>
             <p class="office-value">
-              <a [href]="'mailto:' + officeDetails().email" class="contact-link">
+              <a [href]="'mailto:' + officeDetails().email" class="contact-link" dir="ltr">
                 {{ officeDetails().email }}
               </a>
             </p>
           </div>
 
           <div class="card office-card emergency-card">
-            <h3 class="office-label">Emergency Helpline</h3>
+            <h3 class="office-label">{{ t().officeEmergencyLabel }}</h3>
             <p class="office-value">
-              <a [href]="'tel:' + officeDetails().emergencyHelpline" class="contact-link emergency-text">
+              <a [href]="'tel:' + officeDetails().emergencyHelpline" class="contact-link emergency-text" dir="ltr">
                 {{ officeDetails().emergencyHelpline }}
               </a>
             </p>
@@ -214,12 +257,11 @@
     <div class="footer-container">
       <div class="footer-brand">
         <span class="footer-title">{{ officeDetails().name }}</span>
-        <p class="footer-desc">Committed to safe, secure, and disciplined school transport operations.</p>
+        <p class="footer-desc">{{ t().officeDesc }}</p>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 Basi Transportation Services. All rights reserved.</p>
+        <p>{{ t().footerCopyright }}</p>
       </div>
     </div>
   </footer>
 </div>
-
