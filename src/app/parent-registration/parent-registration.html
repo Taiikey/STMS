@@ -142,6 +142,25 @@
           }
         </div>
 
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">{{ t().confirmPasswordLabel }}</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            class="form-input"
+            [class.input-error]="isFieldInvalid('confirmPassword') || isPasswordMismatch()"
+            [placeholder]="t().confirmPasswordPlaceholder"
+            autocomplete="new-password"
+          />
+          @if (isFieldInvalid('confirmPassword')) {
+            <p class="field-error">{{ t().confirmPasswordRequiredError }}</p>
+          } @else if (isPasswordMismatch()) {
+            <p class="field-error">{{ t().passwordMismatchError }}</p>
+          }
+        </div>
+
         <!-- Children Transportation Management -->
         <div class="transport-management-box">
           <label class="checkbox-container">

@@ -43,9 +43,9 @@
           </button>
         </div>
 
-        <button type="button" class="btn btn-outline" aria-label="Log in to account">
+        <a routerLink="/login" class="btn btn-outline" aria-label="Log in to account">
           {{ t().navLogin }}
-        </button>
+        </a>
         <a routerLink="/register" class="btn btn-primary" aria-label="Register for transportation">
           {{ t().navRegister }}
         </a>
@@ -90,9 +90,9 @@
         </div>
 
         <div class="mobile-auth">
-          <button type="button" class="btn btn-outline full-width" (click)="closeMenu()">
+          <a routerLink="/login" class="btn btn-outline full-width" (click)="closeMenu()">
             {{ t().navLogin }}
-          </button>
+          </a>
           <a routerLink="/register" class="btn btn-primary full-width" (click)="closeMenu()">
             {{ t().navRegister }}
           </a>
@@ -115,7 +115,7 @@
         <div class="hero-actions">
           <a href="#services" class="btn btn-primary btn-lg">{{ t().heroViewServices }}</a>
           <a routerLink="/register" class="btn btn-secondary btn-lg">{{ t().heroRegisterNow }}</a>
-          <button type="button" class="btn btn-outline btn-lg">{{ t().heroLogin }}</button>
+          <a routerLink="/login" class="btn btn-outline btn-lg">{{ t().heroLogin }}</a>
         </div>
       </div>
     </section>
@@ -194,7 +194,7 @@
         </p>
         <div class="cta-actions">
           <a routerLink="/register" class="btn btn-dark btn-lg">{{ t().ctaRegisterBtn }}</a>
-          <button type="button" class="btn btn-outline-white btn-lg">{{ t().ctaLoginBtn }}</button>
+          <a routerLink="/login" class="btn btn-outline-white btn-lg">{{ t().ctaLoginBtn }}</a>
         </div>
       </div>
     </section>

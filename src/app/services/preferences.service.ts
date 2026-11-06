@@ -83,6 +83,10 @@ export interface AppTranslations {
   readonly passwordLabel: string;
   readonly passwordPlaceholder: string;
   readonly passwordError: string;
+  readonly confirmPasswordLabel: string;
+  readonly confirmPasswordPlaceholder: string;
+  readonly confirmPasswordRequiredError: string;
+  readonly passwordMismatchError: string;
   readonly canManageTransportLabel: string;
   readonly childNameLabel: string;
   readonly childNamePlaceholder: string;
@@ -93,6 +97,22 @@ export interface AppTranslations {
   readonly regSuccess: string;
   readonly regGenericError: string;
   readonly regDuplicateEmailError: string;
+
+  // Login
+  readonly loginTitle: string;
+  readonly loginSubtitle: string;
+  readonly loginEmailLabel: string;
+  readonly loginEmailPlaceholder: string;
+  readonly loginEmailError: string;
+  readonly loginPasswordLabel: string;
+  readonly loginPasswordPlaceholder: string;
+  readonly loginPasswordError: string;
+  readonly loginSubmitBtn: string;
+  readonly loginSubmittingBtn: string;
+  readonly loginNoAccountPrompt: string;
+  readonly loginRegisterLink: string;
+  readonly loginSuccess: string;
+  readonly loginGenericError: string;
 }
 
 const EN_TRANSLATIONS: AppTranslations = {
@@ -206,17 +226,21 @@ const EN_TRANSLATIONS: AppTranslations = {
   fullNamePlaceholder: 'Enter your full name',
   fullNameError: 'Full name is required (minimum 3 characters).',
   emailLabel: 'Email Address *',
-  emailPlaceholder: 'parent@example.com',
+  emailPlaceholder: 'email@example.com',
   emailError: 'Please enter a valid email address.',
   phoneLabel: 'Phone Number *',
-  phonePlaceholder: 'e.g. +966 50 123 4567',
-  phoneError: 'Valid contact phone number is required.',
+  phonePlaceholder: 'e.g. 078 545 7267 or +962 78 545 7267',
+  phoneError: 'Please enter a valid Jordanian mobile number (077, 078, or 079).',
   addressLabel: 'Residential Address *',
   addressPlaceholder: 'District, Street name, Residence number',
   addressError: 'Residential address is required for route planning.',
   passwordLabel: 'Password *',
-  passwordPlaceholder: 'Minimum 6 characters',
-  passwordError: 'Password must be at least 6 characters.',
+  passwordPlaceholder: 'Minimum 8 characters',
+  passwordError: 'Password must be at least 8 characters.',
+  confirmPasswordLabel: 'Confirm Password *',
+  confirmPasswordPlaceholder: 'Reenter your password',
+  confirmPasswordRequiredError: 'Please confirm your password.',
+  passwordMismatchError: 'Passwords do not match.',
   canManageTransportLabel:
     'Allow this account to manage transportation information for my children',
   childNameLabel: 'Child or Student Name (Optional)',
@@ -228,6 +252,21 @@ const EN_TRANSLATIONS: AppTranslations = {
   regSuccess: 'Account registered successfully. Redirecting to login page...',
   regGenericError: 'Please complete all required fields with valid details.',
   regDuplicateEmailError: 'An account with this email address is already registered.',
+
+  loginTitle: 'Welcome Back',
+  loginSubtitle: 'Unified portal for parents, guardians, and administration staff.',
+  loginEmailLabel: 'Email Address *',
+  loginEmailPlaceholder: 'email@example.com',
+  loginEmailError: 'Please enter a valid email address.',
+  loginPasswordLabel: 'Password *',
+  loginPasswordPlaceholder: 'Enter your password',
+  loginPasswordError: 'Password is required with at least 8 characters.',
+  loginSubmitBtn: 'Sign In',
+  loginSubmittingBtn: 'Signing In...',
+  loginNoAccountPrompt: 'Do not have an account?',
+  loginRegisterLink: 'Register here',
+  loginSuccess: 'Login successful! Redirecting to portal...',
+  loginGenericError: 'Please provide valid credentials.',
 };
 
 const AR_TRANSLATIONS: AppTranslations = {
@@ -341,17 +380,21 @@ const AR_TRANSLATIONS: AppTranslations = {
   fullNamePlaceholder: 'أدخل اسمك الكامل',
   fullNameError: 'الاسم الكامل مطلوب (3 أحرف كحد أدنى).',
   emailLabel: 'البريد الإلكتروني *',
-  emailPlaceholder: 'parent@example.com',
-  emailError: 'يرجى إدخال عنوان بريد إلكتروني صالح.',
+  emailPlaceholder: 'email@example.com',
+  emailError: 'يرجى إدخال بريد إلكتروني صحيح.',
   phoneLabel: 'رقم الهاتف *',
-  phonePlaceholder: 'مثال: 501234567 966+',
-  phoneError: 'رقم الهاتف مطلوب للتواصل.',
+  phonePlaceholder: 'مثال: 0785457267 أو 57267 7854 962+',
+  phoneError: 'يرجى إدخال رقم هاتف أردني صحيح يبدأ بـ 077 أو 078 أو 079.',
   addressLabel: 'عنوان السكن *',
   addressPlaceholder: 'الحي، اسم الشارع، رقم المبنى',
   addressError: 'عنوان السكن مطلوب لتحديد المسار المناسب.',
   passwordLabel: 'كلمة المرور *',
-  passwordPlaceholder: '6 خانات على الأقل',
-  passwordError: 'يجب ألا تقل كلمة المرور عن 6 خانات.',
+  passwordPlaceholder: '8 خانات على الأقل',
+  passwordError: 'يجب ألا تقل كلمة المرور عن 8 خانات.',
+  confirmPasswordLabel: 'تأكيد كلمة المرور *',
+  confirmPasswordPlaceholder: 'أعد إدخال كلمة المرور',
+  confirmPasswordRequiredError: 'يرجى تأكيد كلمة المرور.',
+  passwordMismatchError: 'كلمتا المرور غير متطابقتين.',
   canManageTransportLabel:
     'السماح لهذا الحساب بإدارة معلومات النقل لأبنائي',
   childNameLabel: 'اسم الطالب أو الابن (اختياري)',
@@ -363,6 +406,21 @@ const AR_TRANSLATIONS: AppTranslations = {
   regSuccess: 'تم تسجيل الحساب بنجاح. جاري التحويل إلى صفحة الدخول...',
   regGenericError: 'يرجى تعبئة جميع الحقول المطلوبة ببيانات صحيحة.',
   regDuplicateEmailError: 'يوجد حساب مسجل مسبقاً بهذا البريد الإلكتروني.',
+
+  loginTitle: 'تسجيل الدخول',
+  loginSubtitle: 'بوابة موحدة لأولياء الأمور وإدارة المدرسة.',
+  loginEmailLabel: 'البريد الإلكتروني *',
+  loginEmailPlaceholder: 'email@example.com',
+  loginEmailError: 'يرجى إدخال بريد إلكتروني صحيح.',
+  loginPasswordLabel: 'كلمة المرور *',
+  loginPasswordPlaceholder: 'أدخل كلمة المرور',
+  loginPasswordError: 'كلمة المرور مطلوبة (8 خانات كحد أدنى).',
+  loginSubmitBtn: 'تسجيل الدخول',
+  loginSubmittingBtn: 'جاري الدخول...',
+  loginNoAccountPrompt: 'ليس لديك حساب؟',
+  loginRegisterLink: 'سجل هنا',
+  loginSuccess: 'تم تسجيل الدخول بنجاح. جاري التحويل...',
+  loginGenericError: 'يرجى إدخال بيانات دخول صحيحة.',
 };
 
 const STORAGE_LANG = 'stms_lang';

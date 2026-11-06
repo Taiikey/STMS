@@ -1,9 +1,35 @@
 import { Component, inject, signal } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { RegistrationService } from '../services/registration.service';
 import { PreferencesService } from '../services/preferences.service';
+
+export function jordanianPhoneValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+  const sanitized = String(control.value).replace(/[\s-]/g, '');
+  const isJordanianMobile = /^(?:\+962|00962|0)?7[789]\d{7}$/.test(sanitized);
+  return isJordanianMobile ? null : { invalidJordanianPhone: true };
+}
+
+export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+  if (!password || !confirmPassword) {
+    return null;
+  }
+  return password === confirmPassword ? null : { passwordMismatch: true };
+}
+
+const STRICT_EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 @Component({
   selector: 'app-parent-registration',
@@ -23,19 +49,34 @@ export class ParentRegistration {
   protected readonly successMessage = signal<string | null>(null);
   protected readonly isSubmitting = signal<boolean>(false);
 
-  protected readonly registerForm = this.fb.group({
-    fullName: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.minLength(7)]],
-    address: ['', [Validators.required, Validators.minLength(5)]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    canManageChildrenTransport: [true],
-    initialChildName: [''],
-  });
+  protected readonly registerForm = this.fb.group(
+    {
+      fullName: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(STRICT_EMAIL_PATTERN)]],
+      phone: ['', [Validators.required, jordanianPhoneValidator]],
+      address: ['', [Validators.required, Validators.minLength(5)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
+      canManageChildrenTransport: [true],
+      initialChildName: [''],
+    },
+    {
+      validators: [passwordMatchValidator],
+    }
+  );
 
   protected isFieldInvalid(fieldName: string): boolean {
     const control = this.registerForm.get(fieldName);
     return Boolean(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  protected isPasswordMismatch(): boolean {
+    const confirmCtrl = this.registerForm.get('confirmPassword');
+    return Boolean(
+      confirmCtrl &&
+      (confirmCtrl.dirty || confirmCtrl.touched) &&
+      this.registerForm.hasError('passwordMismatch')
+    );
   }
 
   protected onSubmit(): void {
