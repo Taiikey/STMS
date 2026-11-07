@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="STMS.Api/STMS.Api.csproj" />
+  <Project Path="STMS.Core/STMS.Core.csproj" Id="9dede082-4767-45e1-8b7f-71b386850724" />
+  <Project Path="STMS.Infrastructure/STMS.Infrastructure.csproj" Id="8306b287-50ac-4470-989c-49dcc6458214" />
 </Solution>
