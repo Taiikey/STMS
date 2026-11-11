@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import {
   AbstractControl,
@@ -7,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { RegistrationService } from '../services/registration.service';
 import { PreferencesService } from '../services/preferences.service';
 
@@ -44,6 +46,7 @@ export class ParentRegistration {
 
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
   private readonly registrationService = inject(RegistrationService);
 
   protected readonly errorMessage = signal<string | null>(null);
@@ -92,25 +95,45 @@ export class ParentRegistration {
     this.isSubmitting.set(true);
 
     const formValues = this.registerForm.getRawValue();
-    const result = this.registrationService.registerParent({
-      fullName: formValues.fullName,
-      email: formValues.email,
-      phone: formValues.phone,
-      address: formValues.address,
-      password: formValues.password,
-      canManageChildrenTransport: formValues.canManageChildrenTransport,
-      initialChildName: formValues.initialChildName,
-    });
 
-    if (!result.success) {
-      this.errorMessage.set(this.t().regDuplicateEmailError);
-      this.isSubmitting.set(false);
-      return;
-    }
+    this.authService
+      .register({
+        fullName: formValues.fullName,
+        email: formValues.email,
+        phone: formValues.phone,
+        address: formValues.address,
+        password: formValues.password,
+      })
+      .subscribe({
+        next: () => {
+          this.registrationService.registerParent({
+            fullName: formValues.fullName,
+            email: formValues.email,
+            phone: formValues.phone,
+            address: formValues.address,
+            password: formValues.password,
+            canManageChildrenTransport: formValues.canManageChildrenTransport,
+            initialChildName: formValues.initialChildName,
+          });
 
-    this.successMessage.set(this.t().regSuccess);
-    setTimeout(() => {
-      void this.router.navigate(['/login']);
-    }, 1200);
+          this.isSubmitting.set(false);
+          this.successMessage.set(this.t().regSuccess);
+          setTimeout(() => {
+            void this.router.navigate(['/login']);
+          }, 1200);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isSubmitting.set(false);
+          if (err.status === 409) {
+            this.errorMessage.set(this.t().regDuplicateEmailError);
+          } else if (err.status === 0) {
+            this.errorMessage.set(this.t().serverConnectionError);
+          } else if (err.error && typeof err.error === 'object' && 'message' in err.error) {
+            this.errorMessage.set(String(err.error.message));
+          } else {
+            this.errorMessage.set(this.t().regGenericError);
+          }
+        },
+      });
   }
 }

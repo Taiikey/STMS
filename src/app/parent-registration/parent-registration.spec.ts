@@ -1,19 +1,33 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { ParentRegistration } from './parent-registration';
 import { RegistrationService } from '../services/registration.service';
 
 describe('ParentRegistration', () => {
   let registrationService: RegistrationService;
+  let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [ParentRegistration],
-      providers: [provideRouter([]), RegistrationService],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        RegistrationService,
+      ],
     }).compileComponents();
 
     registrationService = TestBed.inject(RegistrationService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+    localStorage.clear();
   });
 
   it('should create the component', () => {
@@ -99,17 +113,9 @@ describe('ParentRegistration', () => {
     expect(phoneControl?.valid).toBe(false);
   });
 
-  it('should prevent duplicate email registration', () => {
+  it('should show duplicate email error when API returns 409 Conflict', () => {
     const fixture = TestBed.createComponent(ParentRegistration);
     const component = fixture.componentInstance;
-
-    registrationService.registerParent({
-      fullName: 'Existing Parent',
-      email: 'parent@example.com',
-      phone: '0785457267',
-      address: 'Amman, Jubaiha',
-      password: 'password123',
-    });
 
     component['registerForm'].setValue({
       fullName: 'New Parent',
@@ -124,11 +130,38 @@ describe('ParentRegistration', () => {
 
     component['onSubmit']();
 
-    expect(component['errorMessage']()).toBeTruthy();
+    const req = httpMock.expectOne('/api/auth/register');
+    req.flush({ message: 'Email is already registered.' }, { status: 409, statusText: 'Conflict' });
+
+    expect(component['errorMessage']()).toBe(component['t']().regDuplicateEmailError);
     expect(component['successMessage']()).toBeNull();
   });
 
-  it('should succeed on valid registration with 8-character password, matching confirmation, and Jordanian phone', () => {
+  it('should show server connection error when server is unreachable', () => {
+    const fixture = TestBed.createComponent(ParentRegistration);
+    const component = fixture.componentInstance;
+
+    component['registerForm'].setValue({
+      fullName: 'New Parent',
+      email: 'parent@example.com',
+      phone: '0791234567',
+      address: 'Amman, Abdoun',
+      password: 'password123',
+      confirmPassword: 'password123',
+      canManageChildrenTransport: true,
+      initialChildName: '',
+    });
+
+    component['onSubmit']();
+
+    const req = httpMock.expectOne('/api/auth/register');
+    req.error(new ProgressEvent('error'), { status: 0 });
+
+    expect(component['errorMessage']()).toBe(component['t']().serverConnectionError);
+    expect(component['successMessage']()).toBeNull();
+  });
+
+  it('should succeed on valid registration when API responds with 201 Created', () => {
     const fixture = TestBed.createComponent(ParentRegistration);
     const component = fixture.componentInstance;
 
@@ -144,6 +177,18 @@ describe('ParentRegistration', () => {
     });
 
     component['onSubmit']();
+
+    const req = httpMock.expectOne('/api/auth/register');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({
+      fullName: 'Test Parent',
+      email: 'test@example.com',
+      phone: '0785457267',
+      address: 'Wasfi Al Tal Street, Amman',
+      password: 'secretPassword123',
+    });
+
+    req.flush({ message: 'Registered successfully' }, { status: 201, statusText: 'Created' });
 
     expect(component['errorMessage']()).toBeNull();
     expect(component['successMessage']()).toBeTruthy();

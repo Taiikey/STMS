@@ -113,6 +113,8 @@ export interface AppTranslations {
   readonly loginRegisterLink: string;
   readonly loginSuccess: string;
   readonly loginGenericError: string;
+  readonly loginInvalidCredentialsError: string;
+  readonly serverConnectionError: string;
 }
 
 const EN_TRANSLATIONS: AppTranslations = {
@@ -267,6 +269,8 @@ const EN_TRANSLATIONS: AppTranslations = {
   loginRegisterLink: 'Register here',
   loginSuccess: 'Login successful! Redirecting to portal...',
   loginGenericError: 'Please provide valid credentials.',
+  loginInvalidCredentialsError: 'Invalid email address or password.',
+  serverConnectionError: 'Unable to connect to the server. Please ensure the backend service is running.',
 };
 
 const AR_TRANSLATIONS: AppTranslations = {
@@ -421,6 +425,8 @@ const AR_TRANSLATIONS: AppTranslations = {
   loginRegisterLink: 'سجل هنا',
   loginSuccess: 'تم تسجيل الدخول بنجاح. جاري التحويل...',
   loginGenericError: 'يرجى إدخال بيانات دخول صحيحة.',
+  loginInvalidCredentialsError: 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+  serverConnectionError: 'تعذر الاتصال بالخادم. يرجى التأكد من تشغيل خادم النظام.',
 };
 
 const STORAGE_LANG = 'stms_lang';
