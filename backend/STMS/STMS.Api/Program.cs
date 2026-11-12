@@ -76,6 +76,25 @@ builder.Services
           };
     });
 
+// CORS - Angular Frontend
+const string AngularCorsPolicy = "AngularFrontend";
+
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy(AngularCorsPolicy, policy =>
+  {
+    policy
+        .WithOrigins(
+            "http://localhost:4200",
+            "https://localhost:4200",
+            "http://localhost:4201",
+            "https://localhost:4201"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+  });
+});
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
@@ -123,6 +142,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS before Authentication and Authorization
+app.UseCors(AngularCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();
